@@ -27,9 +27,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown06" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown06">
@@ -38,6 +35,20 @@
                             <a class="dropdown-item" href="#">Something else here</a>
                         </div>
                     </li>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li>
+                            <a class="nav-link" href="{{ path('fos_user_security_logout') }}">
+                                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a class="nav-link" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <form class="form-inline my-2 my-md-0">
                     <input class="form-control" type="text" placeholder="Search">

@@ -13,7 +13,11 @@
     </section>
     <h2>Homepage</h2>
 
-    <a href="{{ path('app_article_add') }}">Add New Article</a>
+    {% if is_granted("ROLE_SUPER_ADMIN") %}
+        <a href="{{ path('app_article_add') }}">Add New Article</a>
+    {% else %}
+        <p>testses</p>
+    {% endif %}
     <table class="col-sm-12 table table-bordered table-striped table-dark table-hover">
         <tr>
             <th>Title</th>
