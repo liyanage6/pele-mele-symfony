@@ -5,11 +5,18 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Article;
 use AppBundle\Form\ArticleType;
 use Doctrine\ORM\EntityManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-
+/**
+ * Class ArticleController
+ * @package AppBundle\Controller
+ *
+ * @Route("/article")
+ */
 class ArticleController extends Controller
 {
 
@@ -19,7 +26,8 @@ class ArticleController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Doctrine\ORM\OptimisticLockException
      *
-     * @Route("/add-article")
+     * @Route("/add")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function addAction (Request $request)
     {
@@ -34,15 +42,43 @@ class ArticleController extends Controller
 
             $article = $form->getData();
             $article->setCreatedAt(new \DateTime());
+            $article->setUser($this->getUser());
 
             $em->persist($article);
             $em->flush();
 
-            return $this->redirect("/");
+            $articles = $em->getRepository('AppBundle:Article')->findAll();
+
+            return $this->redirectToRoute('homepage', ["articles" => $articles]);
         }
 
         return $this->render("article/add.html.twig", [
             "form" => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Article $article
+     *
+     * @Route("/delete/{article}")
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|AccessDeniedException
+     */
+    public function deleteAction (Article $article)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        $article = $em->getRepository('AppBundle:Article')->find($article);
+
+        if($this->getUser() == $article->getUser() || $article->getUser()->getRoles() == "ROLE_SUPER_ADMIN"){
+            $em->remove($article);
+        }
+        else{
+            throw new AccessDeniedException("You don't have the right.");
+        }
+
+        $articles = $em->getRepository('AppBundle:Article')->findAll();
+        
+        return $this->redirectToRoute('homepage', ['articles' => $articles]);
     }
 }
