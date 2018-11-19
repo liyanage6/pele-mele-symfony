@@ -72,13 +72,14 @@ class ArticleController extends Controller
 
         if($this->getUser() == $article->getUser() || $article->getUser()->getRoles() == "ROLE_SUPER_ADMIN"){
             $em->remove($article);
+            $em->flush();
         }
         else{
             throw new AccessDeniedException("You don't have the right.");
         }
 
         $articles = $em->getRepository('AppBundle:Article')->findAll();
-        
+
         return $this->redirectToRoute('homepage', ['articles' => $articles]);
     }
 }
