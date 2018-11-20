@@ -70,7 +70,7 @@ class ArticleController extends Controller
 
         $article = $em->getRepository('AppBundle:Article')->find($article);
 
-        if($this->getUser() == $article->getUser() || $article->getUser()->getRoles() == "ROLE_SUPER_ADMIN"){
+        if($this->getUser() == $article->getUser() || in_array( "ROLE_SUPER_ADMIN", $this->getUser()->getRoles())  ){
             $em->remove($article);
             $em->flush();
         }
@@ -82,4 +82,6 @@ class ArticleController extends Controller
 
         return $this->redirectToRoute('homepage', ['articles' => $articles]);
     }
+
+    
 }

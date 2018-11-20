@@ -48,7 +48,7 @@
                                     <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                     {% if is_granted("ROLE_SUPER_ADMIN") or app.user == article.user  %}
                                         <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ path('app_article_delete', {'article':article.id}) }}">Delete</a></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a class="confirmation" href="{{ path('app_article_delete', {'article':article.id}) }}" >Delete</a></button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -60,4 +60,12 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.confirmation').on('click', function () {
+            return confirm('Are you sure?');
+        });
+    </script>
 {% endblock %}
