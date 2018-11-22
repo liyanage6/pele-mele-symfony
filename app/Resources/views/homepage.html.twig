@@ -11,11 +11,15 @@
             </p>
         </div>
     </section>
-    <h2>Homepage</h2>
 
     {% if is_granted("ROLE_USER") %}
-        <a class="btn btn-primary my-2" href="{{ path('app_article_add') }}">Add New Article</a>
+        <h3>Add article</h3>
+        <div class="col-sm-12">
+            {{ include('article/add-form.html.twig') }}
+        </div>
     {% endif %}
+
+
     <table class="col-sm-12 table table-bordered table-striped table-dark table-hover">
         <tr>
             <th>Title</th>
@@ -28,11 +32,13 @@
                 <td>{{article.title}}</td>
                 <td>{{article.content}}</td>
                 <td>{{article.createdAt | date('Y-m-d h:i:s')}}</td>
-                <td>Edit - Delete</td>
+                <td>
+                    <a href="{{ path('app_article_edit', {'article': article.id}) }}">Edit </a> -
+                    <a href="{{ path('app_article_delete', {'article': article.id}) }}">Delete</a>
+                </td>
             </tr>
         {% endfor %}
     </table>
-
 
     <div class="album py-5 bg-light">
         <div class="row">
@@ -45,10 +51,10 @@
                             <p class="card-text">{{ article.content }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ path('app_article_show', {'article' : article.id}) }}">View</a></button>
                                     {% if is_granted("ROLE_SUPER_ADMIN") or app.user == article.user  %}
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a class="confirmation" href="{{ path('app_article_delete', {'article':article.id}) }}" >Delete</a></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" ><a class="edit-article" href="{{ path('app_article_edit', {'article':article.id}) }}">Edit</a></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary "><a class="delete-confirmation" href="{{ path('app_article_delete', {'article':article.id}) }}">Delete</a></button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -64,8 +70,9 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        $('.confirmation').on('click', function () {
+        $('.delete-confirmation').on('click', function () {
             return confirm('Are you sure?');
         });
+
     </script>
 {% endblock %}

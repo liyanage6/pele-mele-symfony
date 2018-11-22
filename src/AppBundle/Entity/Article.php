@@ -42,6 +42,12 @@ class Article
      */
     private $content;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $modifiedAt;
 
     /**
      * @var User
@@ -147,6 +153,22 @@ class Article
     public function setUser ($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getModifiedAt ()
+    {
+        return $this->modifiedAt;
+    }
+
+    /**
+     * @param \DateTime $modifiedAt
+     */
+    public function setModifiedAt ($modifiedAt)
+    {
+        $this->modifiedAt = $modifiedAt;
     }
     
 }

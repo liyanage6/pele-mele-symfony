@@ -52,7 +52,7 @@ class ArticleController extends Controller
             return $this->redirectToRoute('homepage', ["articles" => $articles]);
         }
 
-        return $this->render("article/add.html.twig", [
+        return $this->render("article/add-form.html.twig", [
             "form" => $form->createView()
         ]);
     }
@@ -63,6 +63,7 @@ class ArticleController extends Controller
      * @Route("/delete/{article}")
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|AccessDeniedException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function deleteAction (Article $article)
     {
@@ -83,5 +84,56 @@ class ArticleController extends Controller
         return $this->redirectToRoute('homepage', ['articles' => $articles]);
     }
 
-    
+
+    /**
+     * @param Article $article
+     *
+     * @Route("/edit/{article}")
+     */
+    public function  editAction(Article $article, Request $request)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        $editArticle = $em->getRepository("AppBundle:Article")->find($article);
+
+        $form = $this->createForm(ArticleType::class, $editArticle);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $editArticle = $form->getData();
+            $editArticle->setModifiedAt(new \DateTime());
+
+            $articles = $em->getRepository("AppBundle:Article")->findAll();
+            $newArticle = new Article;
+            $form = $this->createForm(ArticleType::class, $newArticle);
+
+            $em->persist($editArticle);
+            $em->flush();
+
+            return $this->render('homepage.html.twig', [
+                'articles' => $articles,
+                'form' => $form->createView()
+            ]);
+        }
+
+        return $this->render(":article:edit.html.twig", [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @param Article $article
+     *
+     * @Route("/{article}")
+     */
+    public function showAction (Article $article)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        $article = $em->getRepository('AppBundle:Article')->find($article);
+
+        return $this->render(':article:show.html.twig', [
+            'article' => $article
+        ]);
+    }
 }

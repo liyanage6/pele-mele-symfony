@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h2>{{ article.title }}</h2>
+    <h6>{{ article.createdAt | date("d/m/Y") }}</h6>
+    {% if article.modifiedAt %}
+        <h6>{{ article.modifiedAt | date("d/m/Y") }}</h6>
+    {% endif %}
+
+    <p>{{ article.content }}</p>
+
+{% endblock %}
