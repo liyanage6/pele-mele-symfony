@@ -13,13 +13,35 @@
     </section>
 
     {% if is_granted("ROLE_USER") %}
-        <h3>Add article</h3>
+        <h3>Add Article</h3>
         <div class="col-sm-12">
             {{ include('article/add-form.html.twig') }}
         </div>
+
+        <h3>Category</h3>
+        <a href="{{ path('/categoryapp_category_add') }}">Add Category</a>
+        <h5>List Categories</h5>
+        <table class="col-sm-12 table table-bordered table-striped table-dark table-hover">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <a href="">Edit </a> -
+                        <a href="">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endif %}
 
 
+    <h5>List Articles</h5>
     <table class="col-sm-12 table table-bordered table-striped table-dark table-hover">
         <tr>
             <th>Title</th>

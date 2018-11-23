@@ -18,6 +18,7 @@ class DefaultController extends Controller
     {
         $em = $this->get('doctrine.orm.entity_manager');
         $articles = $em->getRepository("AppBundle:Article")->findAll();
+        $categories = $em->getRepository('AppBundle:Category')->findAll();
 
         $article = new Article();
 
@@ -37,14 +38,16 @@ class DefaultController extends Controller
 
             return $this->render('homepage.html.twig', [
                 "articles" => $articles,
-                "form" => $form->createView()
+                "form" => $form->createView(),
+                "categories" => $categories
             ]);
         }
 
 
         return $this->render('homepage.html.twig', [
             "articles" => $articles,
-            "form" => $form->createView()
+            "form" => $form->createView(),
+            "categories" => $categories
         ]);
     }
 }

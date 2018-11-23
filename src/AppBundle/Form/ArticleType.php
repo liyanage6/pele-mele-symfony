@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,6 +20,12 @@ class ArticleType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('content', CKEditorType::class)
+            ->add('category', EntityType::class, array(
+                'class' => "AppBundle\Entity\Category",
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => false
+            ))
             ->add('submit', SubmitType::class)
         ;
     }

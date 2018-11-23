@@ -56,6 +56,13 @@ class Article
      */
     protected $user;
 
+    /**
+     * @var Category
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Category")
+     */
+    protected $category;
+
 
     /**
      * Get id
@@ -170,5 +177,23 @@ class Article
     {
         $this->modifiedAt = $modifiedAt;
     }
+
+    /**
+     * @return Category
+     */
+    public function getCategory ()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory ($category)
+    {
+        $this->category = $category;
+    }
+
+
     
 }

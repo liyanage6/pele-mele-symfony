@@ -34,6 +34,10 @@
         {{ form_widget(form.content, { 'attr': {'class': 'form-control'} }) }}
     </div>
     <div class="form-group col-md-12">
+        {{ form_label(form.category) }}
+        {{ form_widget(form.category, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+    <div class="form-group col-md-12">
         {{ form_widget(form.submit, { 'attr': {'class': 'btn btn-primary'} }) }}
         {#class="btn btn-primary my-2"#}
     </div>
