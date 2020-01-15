@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Todos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Startedat</th>
+                <th>Finishedat</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Done</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for todo in todos %}
+            <tr>
+                <td><a href="{{ path('todo_show', { 'id': todo.id }) }}">{{ todo.id }}</a></td>
+                <td>{{ todo.name }}</td>
+                <td>{% if todo.startedAt %}{{ todo.startedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if todo.finishedAt %}{{ todo.finishedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if todo.createdAt %}{{ todo.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if todo.updatedAt %}{{ todo.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if todo.done %}Yes{% else %}No{% endif %}</td>
+                <td>{{ todo.author }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('todo_show', { 'id': todo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('todo_edit', { 'id': todo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('todo_new') }}">Create a new todo</a>
+        </li>
+    </ul>
+{% endblock %}
